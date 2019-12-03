@@ -6,9 +6,10 @@ def parse_input():
         inputs.append(line.strip('\n'))
     return inputs
     
-def plot_path(inputs, path, find_intersections=False):
+def plot_path(inputs, path, ref_path=None):
     x=0
     y=0
+    c = 0
     hits = []
     for i in inputs.split(','):
         (d, v) = (i[0],int(i[1:]))
@@ -24,13 +25,19 @@ def plot_path(inputs, path, find_intersections=False):
             fn = lambda x,y: (x, y - 1)
         
         for p in range(1,v+1):
+            c+=1
             x,y = fn(x,y)
-            if find_intersections:
-                key = "{}_{}".format(x,y)
-                if key in path:
-                    hits.append(key)
+            key = "{}_{}".format(x,y)
+
+            if key in path:
+                pass # first count of steps is retained
             else:
-                path["{}_{}".format(x,y)] = 1
+                path[key] = c
+                
+            # find intersections
+            if ref_path and key in ref_path:                    
+                hits.append(key)
+                
     return hits
 
 def find_manhattan_dist(hits):
@@ -43,12 +50,22 @@ def find_manhattan_dist(hits):
 if __name__ == '__main__':
     inputs = parse_input()
     w1_path = {}
+    w2_path = {}
 
     plot_path(inputs[0], w1_path)
-    hits = plot_path(inputs[1], w1_path, True)
+    hits = plot_path(inputs[1], w2_path, w1_path)
     print('hits', hits)
     
+    # part one
     md_list = find_manhattan_dist(hits)
     print('manhattan distances', md_list)
     print('Shortest', min(md_list))
+    
+    # part two
+    steps = []
+    for h in hits:
+        steps.append(w1_path[h] + w2_path[h])
+    print('steps', steps);
+    print('shortest step', min(steps))
+        
     
