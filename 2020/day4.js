@@ -8,7 +8,6 @@ const MIN_MAX_PARAMS = {
     iyr: [2010, 2020],
     eyr: [2020, 2030],
     hgt: { cm: [150, 193], in: [59, 76] },
-
 }
 
 const validateRange = (rawValue, min, max) => {
@@ -32,7 +31,6 @@ function isPassportValid(passport) {
         if(!(key in passport)) {
             return false;
         }
-
         const value = passport[key];
         let state = true;
         switch(key) {
@@ -62,14 +60,12 @@ function isPassportValid(passport) {
             return false;
         }
     }
-
     return true;
 }
 
 function parsePassports(rawData) {
     const rows = rawData.split("\n");
     let valid = 0;
-
     let passport = {};
     for(let i=0; i<rows.length; i++) {
         const r = rows[i];
@@ -78,7 +74,6 @@ function parsePassports(rawData) {
                 valid++;
             }
             passport = {};
-
         }
         else {
             const items = r.split(' ');
@@ -92,10 +87,8 @@ function parsePassports(rawData) {
     if(passport && isPassportValid(passport)) {
         valid++;
     }
-
     return valid;
 }
-
 
 function main() {
     const rawData = getInputData("day4");
